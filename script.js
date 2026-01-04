@@ -38,6 +38,7 @@ const backBtn = document.getElementById("backBtn");
 // ----------------------
 function renderPlayers() {
   playersList.innerHTML = "";
+
   state.players.forEach((name, idx) => {
     const li = document.createElement("li");
     li.textContent = name;
@@ -45,6 +46,7 @@ function renderPlayers() {
     const remove = document.createElement("button");
     remove.textContent = "×";
     remove.title = "Supprimer";
+
     remove.addEventListener("click", () => {
       state.players.splice(idx, 1);
       renderPlayers();
@@ -81,10 +83,11 @@ function showNextCard() {
 }
 
 // (Optionnel) tentative de lock paysage (pas fiable partout)
-async function tryLockLandscape() {
+// IMPORTANT : on n'attend JAMAIS (pas de await) pour ne pas bloquer le bouton "Jouer" sur mobile
+function tryLockLandscape() {
   try {
     if (screen.orientation && screen.orientation.lock) {
-      await screen.orientation.lock("landscape");
+      screen.orientation.lock("landscape").catch(() => {});
     }
   } catch (_) {}
 }
@@ -96,6 +99,7 @@ addPlayerBtn.addEventListener("click", () => {
   const name = normalizeName(playerInput.value);
   if (!name) return;
 
+  // éviter doublons
   if (state.players.some(p => p.toLowerCase() === name.toLowerCase())) {
     playerInput.value = "";
     playerInput.focus();
@@ -114,20 +118,44 @@ playerInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") addPlayerBtn.click();
 });
 
-startBtn.addEventListener("click", async () => {
-  await tryLockLandscape();
+// Sécurise certains téléphones (tap -> click)
+startBtn.addEventListener(
+  "touchend",
+  (e) => {
+    e.preventDefault();
+    startBtn.click();
+  },
+  { passive: false }
+);
+
+startBtn.addEventListener("click", () => {
+  // Passe en jeu immédiatement (important sur mobile)
   showScreen("game");
 
   // V1 : mode classique => fond bleu
   gameStage.className = "game-stage classic";
 
+  // Première carte
   showNextCard();
+
+  // Ensuite seulement, on tente de lock (sans bloquer)
+  tryLockLandscape();
 });
 
 // Tap/click plein écran => suivante
 gameStage.addEventListener("click", () => {
   showNextCard();
 });
+
+// (Optionnel) pareil pour mobile : tap -> click sur le stage
+gameStage.addEventListener(
+  "touchend",
+  (e) => {
+    e.preventDefault();
+    showNextCard();
+  },
+  { passive: false }
+);
 
 backBtn.addEventListener("click", () => {
   showScreen("setup");
@@ -136,3 +164,4 @@ backBtn.addEventListener("click", () => {
 // init
 renderPlayers();
 startBtn.disabled = true;
+playerInput.focus();
