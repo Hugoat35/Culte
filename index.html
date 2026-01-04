@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>CULTE</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ÉCRAN ACCUEIL (portrait) -->
+  <main id="screen-setup" class="screen active">
+    <h1 class="logo">CULTE</h1>
+    <p class="subtitle">Ajoute les joueurs, puis lance la partie.</p>
+
+    <div class="card">
+      <label class="label" for="playerInput">Nom du joueur</label>
+      <div class="row">
+        <input id="playerInput" class="input" type="text" maxlength="16" placeholder="Ex : Alex" />
+        <button id="addPlayerBtn" class="btn">Ajouter</button>
+      </div>
+
+      <ul id="playersList" class="players"></ul>
+
+      <button id="startBtn" class="btn primary" disabled>Jouer</button>
+      <button id="resetBtn" class="btn ghost">Réinitialiser</button>
+    </div>
+  </main>
+
+  <!-- ÉCRAN JEU (paysage) -->
+  <main id="screen-game" class="screen">
+    <div id="gameCard" class="game-card">
+      <div class="badge">Tape pour la carte suivante</div>
+      <div id="cardText" class="card-text">—</div>
+    </div>
+
+    <button id="backBtn" class="btn ghost back">← Retour</button>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
