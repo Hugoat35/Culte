@@ -1,167 +1,142 @@
-// ----------------------
-// DONNÉES (V1 simple)
-// ----------------------
-const cards = [
-  "{player} boit 2 gorgées 🍺",
-  "Tout le monde boit 1 gorgée 🥂",
-  "{player} fait un compliment à quelqu’un.",
-  "{player} raconte une anecdote gênante 😳",
-  "Le dernier à toucher son nez boit 2 gorgées 👃",
-  "{player} choisit quelqu’un : il boit 2 gorgées.",
-  "Tout le monde lève son verre : santé ! 🍻",
-  "{player} imite une célébrité pendant 10 secondes 🎭",
-  "Le plus grand boit 1 gorgée 🧍‍♂️",
-  "{player} invente une règle jusqu’à la prochaine carte 📜"
-];
+// --- script.js ---
 
 const state = {
-  players: []
+    players: JSON.parse(localStorage.getItem('culte_players')) || [],
+    currentGame: null
 };
 
-// ----------------------
-// DOM
-// ----------------------
-const setupScreen = document.getElementById("screen-setup");
-const gameScreen = document.getElementById("screen-game");
+// Elements DOM
+const screens = {
+    players: document.getElementById('screen-players'),
+    selection: document.getElementById('screen-selection'),
+    game: document.getElementById('screen-game')
+};
+const playersContainer = document.getElementById('players-container');
+const playerCountLabel = document.getElementById('player-count-label');
+const inputName = document.getElementById('new-player-name');
+const btnAdd = document.getElementById('add-player-btn');
+const btnToGames = document.getElementById('to-games-btn');
+const gameContainer = document.getElementById('game-container');
 
-const playerInput = document.getElementById("playerInput");
-const addPlayerBtn = document.getElementById("addPlayerBtn");
-const playersList = document.getElementById("playersList");
-const startBtn = document.getElementById("startBtn");
+// --- FONCTIONS JOUEURS ---
 
-const gameStage = document.getElementById("gameStage");
-const cardText = document.getElementById("cardText");
-const backBtn = document.getElementById("backBtn");
+function savePlayers() {
+    localStorage.setItem('culte_players', JSON.stringify(state.players));
+}
 
-// ----------------------
-// HELPERS
-// ----------------------
-function renderPlayers() {
-  playersList.innerHTML = "";
+function updatePlayerList() {
+    playersContainer.innerHTML = '';
+    
+    if(state.players.length === 0) {
+        playersContainer.innerHTML = '<div class="empty-state" style="width:100%; text-align:center; color:white; opacity:0.7; font-style:italic;">Ajoute tes amis pour commencer !</div>';
+    }
 
-  state.players.forEach((name, idx) => {
-    const li = document.createElement("li");
-    li.textContent = name;
-
-    const remove = document.createElement("button");
-    remove.textContent = "×";
-    remove.title = "Supprimer";
-
-    remove.addEventListener("click", () => {
-      state.players.splice(idx, 1);
-      renderPlayers();
-      startBtn.disabled = state.players.length < 2;
+    state.players.forEach((player, index) => {
+        const chip = document.createElement('div');
+        chip.className = 'player-chip';
+        // Rotation aléatoire légère pour le style
+        chip.style.transform = `rotate(${(Math.random() - 0.5) * 4}deg)`;
+        chip.innerHTML = `
+            ${player}
+            <div class="remove" onclick="removePlayer(${index})">×</div>
+        `;
+        playersContainer.appendChild(chip);
     });
 
-    li.appendChild(remove);
-    playersList.appendChild(li);
-  });
-}
-
-function normalizeName(raw) {
-  return raw.trim().replace(/\s+/g, " ");
-}
-
-function getRandomPlayer() {
-  const i = Math.floor(Math.random() * state.players.length);
-  return state.players[i];
-}
-
-function getRandomCardText() {
-  const template = cards[Math.floor(Math.random() * cards.length)];
-  const player = getRandomPlayer();
-  return template.replaceAll("{player}", player);
-}
-
-function showScreen(which) {
-  setupScreen.classList.toggle("active", which === "setup");
-  gameScreen.classList.toggle("active", which === "game");
-}
-
-function showNextCard() {
-  cardText.textContent = getRandomCardText();
-}
-
-// (Optionnel) tentative de lock paysage (pas fiable partout)
-// IMPORTANT : on n'attend JAMAIS (pas de await) pour ne pas bloquer le bouton "Jouer" sur mobile
-function tryLockLandscape() {
-  try {
-    if (screen.orientation && screen.orientation.lock) {
-      screen.orientation.lock("landscape").catch(() => {});
+    // Update Footer
+    playerCountLabel.innerText = `${state.players.length} Joueur${state.players.length > 1 ? 's' : ''}`;
+    
+    // Validation (Min 3 joueurs pour Undercover)
+    if (state.players.length >= 3) {
+        btnToGames.disabled = false;
+        btnToGames.innerText = "Choisir un jeu";
+    } else {
+        btnToGames.disabled = true;
+        btnToGames.innerText = `Manque ${3 - state.players.length} joueur(s)`;
     }
-  } catch (_) {}
 }
 
-// ----------------------
-// EVENTS
-// ----------------------
-addPlayerBtn.addEventListener("click", () => {
-  const name = normalizeName(playerInput.value);
-  if (!name) return;
+window.removePlayer = (index) => {
+    state.players.splice(index, 1);
+    savePlayers();
+    updatePlayerList();
+};
 
-  // éviter doublons
-  if (state.players.some(p => p.toLowerCase() === name.toLowerCase())) {
-    playerInput.value = "";
-    playerInput.focus();
-    return;
-  }
+function addPlayer() {
+    const name = inputName.value.trim();
+    if (name && !state.players.includes(name)) {
+        state.players.push(name);
+        savePlayers();
+        inputName.value = '';
+        updatePlayerList();
+        inputName.focus();
+    }
+}
 
-  state.players.push(name);
-  playerInput.value = "";
-  playerInput.focus();
+// Event Listeners
+btnAdd.addEventListener('click', addPlayer);
+inputName.addEventListener('keypress', (e) => { if(e.key === 'Enter') addPlayer(); });
 
-  renderPlayers();
-  startBtn.disabled = state.players.length < 2;
+// --- NAVIGATION ---
+
+function showScreen(screenId) {
+    // Cache tout
+    Object.values(screens).forEach(s => {
+        s.classList.remove('active');
+        s.classList.add('hidden');
+    });
+    // Affiche le bon
+    const target = document.getElementById(screenId);
+    target.classList.remove('hidden');
+    target.classList.add('active');
+}
+
+// Bouton "Commencer"
+btnToGames.addEventListener('click', () => showScreen('screen-selection'));
+
+// Boutons Retour
+document.querySelectorAll('.back-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        const targetId = e.currentTarget.dataset.target;
+        showScreen(targetId);
+    });
 });
 
-playerInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") addPlayerBtn.click();
+// Quitter le jeu
+document.getElementById('quit-game-btn').addEventListener('click', () => {
+    if(confirm("Quitter la partie en cours ?")) {
+        gameContainer.innerHTML = '';
+        state.currentGame = null;
+        showScreen('screen-selection');
+    }
 });
 
-// Sécurise certains téléphones (tap -> click)
-startBtn.addEventListener(
-  "touchend",
-  (e) => {
-    e.preventDefault();
-    startBtn.click();
-  },
-  { passive: false }
-);
+// --- LANCEMENT DES JEUX ---
 
-startBtn.addEventListener("click", () => {
-  // Passe en jeu immédiatement (important sur mobile)
-  showScreen("game");
+document.querySelectorAll('.game-card').forEach(card => {
+    card.addEventListener('click', async () => {
+        if (card.classList.contains('disabled')) return;
 
-  // V1 : mode classique => fond bleu
-  gameStage.className = "game-stage classic";
+        const gameName = card.dataset.game;
+        try {
+            // Import dynamique
+            const module = await import(`./modes/${gameName}/logic.js`);
+            
+            showScreen('screen-game');
+            
+            // Nettoyage conteneur
+            gameContainer.innerHTML = '';
+            
+            // Instanciation
+            state.currentGame = new module.default(state.players, gameContainer);
+            state.currentGame.start();
 
-  // Première carte
-  showNextCard();
-
-  // Ensuite seulement, on tente de lock (sans bloquer)
-  tryLockLandscape();
+        } catch (err) {
+            console.error(err);
+            alert("Erreur chargement du jeu");
+        }
+    });
 });
 
-// Tap/click plein écran => suivante
-gameStage.addEventListener("click", () => {
-  showNextCard();
-});
-
-// (Optionnel) pareil pour mobile : tap -> click sur le stage
-gameStage.addEventListener(
-  "touchend",
-  (e) => {
-    e.preventDefault();
-    showNextCard();
-  },
-  { passive: false }
-);
-
-backBtn.addEventListener("click", () => {
-  showScreen("setup");
-});
-
-// init
-renderPlayers();
-startBtn.disabled = true;
-playerInput.focus();
+// Init
+updatePlayerList();

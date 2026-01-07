@@ -1,54 +1,83 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>CULTE</title>
-
-  <!-- Anti cache (bonus) -->
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
-
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CULTE</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <!-- ÉCRAN ACCUEIL (portrait) -->
-  <main id="screen-setup" class="screen active">
-    <h1 class="logo">CULTE</h1>
-    <p class="subtitle">Ajoute les joueurs, puis lance la partie.</p>
+    <main id="app">
+        
+        <section id="screen-players" class="screen active">
+            
+            <div class="logo-area">
+                <h1 class="app-title">CULTE</h1>
+            </div>
 
-    <div class="card">
-      <label class="label" for="playerInput">Nom du joueur</label>
-      <div class="row">
-        <input id="playerInput" class="input" type="text" maxlength="16" placeholder="Ex : Alex" />
-        <button id="addPlayerBtn" class="btn">Ajouter</button>
-      </div>
+            <div class="input-container">
+                <input type="text" id="new-player-name" placeholder="Prénom..." maxlength="12" autocomplete="off">
+                <button id="add-player-btn" aria-label="Ajouter joueur">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
 
-      <ul id="playersList" class="players"></ul>
+            <div id="players-container" class="players-grid">
+                <div class="empty-state">Ajoutez les participants !</div>
+            </div>
 
-      <button id="startBtn" class="btn primary" disabled>Jouer</button>
-    </div>
-  </main>
+            <div class="footer-action">
+                <p id="player-count-label">0 Joueurs</p>
+                <button id="to-games-btn" class="main-btn" disabled>
+                    Commencer
+                </button>
+            </div>
+        </section>
 
-  <!-- ÉCRAN JEU (paysage) -->
-  <main id="screen-game" class="screen">
-    <!-- Overlay si le tel est en portrait -->
-    <div id="rotateOverlay" class="rotate-overlay">
-      <div class="rotate-box">
-        <div class="rotate-title">Tourne ton téléphone 📱↩️</div>
-        <div class="rotate-sub">Le jeu se joue en paysage.</div>
-      </div>
-    </div>
 
-    <div id="gameStage" class="game-stage classic">
-      <div id="cardText" class="card-text">—</div>
-    </div>
+        <section id="screen-selection" class="screen hidden">
+            <div class="header-nav">
+                <button class="back-btn" data-target="screen-players">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <h2>Choisir un mode</h2>
+            </div>
+            
+            <div class="games-grid">
+                <div class="game-card" data-game="undercover">
+                    <div class="card-content">
+                        <div class="icon">🕵️</div>
+                        <h3>Undercover</h3>
+                        <p>Démasquez l'intrus.</p>
+                    </div>
+                </div>
+                
+                <div class="game-card disabled">
+                    <div class="card-content">
+                        <div class="icon">🔮</div>
+                        <h3>Rituel</h3>
+                        <p>Bientôt...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <button id="backBtn" class="btn ghost back">← Retour</button>
-  </main>
 
-  <script src="script.js"></script>
+        <section id="screen-game" class="screen hidden">
+            <button id="quit-game-btn" class="close-game-btn">×</button>
+            
+            <div id="game-container"></div>
+        </section>
+
+    </main>
+
+    <script type="module" src="script.js"></script>
 </body>
 </html>
