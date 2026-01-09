@@ -36,7 +36,7 @@ export default class RituelGame {
 
         this.buildDeck();
 
-        // GESTIONNAIRE DE TRANSITION HARMONISÉ (Vitesse identique, réactivité accrue)
+        // GESTIONNAIRE DE TRANSITION HARMONISÉ
         const animateAndNext = (btnElement, isInstant = false) => {
             if (navigator.vibrate) navigator.vibrate(20); 
 
@@ -49,19 +49,22 @@ export default class RituelGame {
                 }
             }
             
-            // Recherche de la carte (par ID ou par classe par sécurité)
             const currentCardEl = document.getElementById('current-card') || this.container.querySelector('.rituel-card');
             
-            // RÉGLAGES DE TEMPS
-            // delayBeforeAnimation : 0ms pour les jeux (instantané), 800ms pour les votes (laisser lire le choix)
             const delayBeforeAnimation = isInstant ? 0 : 800; 
-            // animationExitDuration : 750ms correspond au temps de l'animation CSS card-exit
             const animationExitDuration = 750; 
 
             const performTransition = () => {
                 if (currentCardEl) {
+                    // --- CORRECTION BUG ANIMATION ---
+                    // On retire l'effet de tremblement (ou tout autre effet) 
+                    // pour laisser la place à l'animation de sortie
+                    currentCardEl.classList.remove('effect-shake'); 
+                    
+                    // Petite astuce pour forcer le navigateur à recalculer le style (Reflow)
+                    void currentCardEl.offsetWidth; 
+
                     currentCardEl.classList.add('card-exit');
-                    // On s'assure que la durée CSS est bien synchronisée sur 0.75s ou 0.8s
                     currentCardEl.style.animationDuration = '0.8s';
                     
                     setTimeout(() => this.nextCard(), animationExitDuration);
@@ -77,8 +80,6 @@ export default class RituelGame {
             }
         };
         
-        // On expose la fonction pour les mini-jeux. 
-        // Le paramètre "true" assure que la carte s'envole dès le clic.
         window.nextRituelCard = (btn) => animateAndNext(btn, true);
 
         window.showVirusDetail = (virusId) => {
@@ -381,6 +382,10 @@ export default class RituelGame {
             if (cardEl) {
                 cardEl.classList.toggle('flipped');
             } else if (simpleCard) {
+                // Petite correction ici : on s'assure de nettoyer aussi les effets si on clique directement sur la carte
+                simpleCard.classList.remove('effect-shake'); 
+                void simpleCard.offsetWidth;
+
                 simpleCard.classList.add('card-exit');
                 setTimeout(() => this.nextCard(), 750);
             }

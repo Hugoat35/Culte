@@ -28,7 +28,7 @@ export default [
     },
     {
         game: JeuxGame,
-        weight: 20,
+        weight: 1,
         handler: handleSplitGame // <--- 4. Handler
     }
 ];
