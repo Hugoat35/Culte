@@ -158,6 +158,8 @@ body {
 .games-grid { 
     display: grid; grid-template-columns: 1fr 1fr; gap: 15px; 
     padding: 20px; overflow-y: auto; flex-grow: 1;
+    /* FIX DE L'ESPACEMENT VERTICAL */
+    align-content: start; 
 }
 .game-card {
     background: white; padding: 20px; border-radius: 20px;
@@ -235,7 +237,7 @@ body {
 }
 
 /* =========================================
-   7. RITUEL MODE (CORRECTION CLIC MOBILE)
+   7. RITUEL MODE
    ========================================= */
 
 .rituel-zone {
@@ -280,18 +282,15 @@ body {
     box-shadow: none; 
 }
 
-/* --- LE FIX POUR LE CLIC SUR TÉLÉPHONE --- */
-/* Par défaut : le dos n'est pas cliquable (pour ne pas interférer avec le front) */
+/* Fix Clic Mobile */
 .flip-front { z-index: 2; pointer-events: auto; }
 .flip-back { 
     transform: rotateY(180deg); 
     background: #ffffff; 
     justify-content: center;
     z-index: 1;
-    pointer-events: none; /* IMPORTANT : Empêche le clic fantôme */
+    pointer-events: none; 
 }
-
-/* Quand la carte est retournée : on inverse les rôles */
 .flip-container.flipped .flip-front { pointer-events: none; z-index: 1; }
 .flip-container.flipped .flip-back { pointer-events: auto; z-index: 2; }
 
@@ -301,7 +300,7 @@ body {
     font-size: 0.8em; font-weight: 800; letter-spacing: 2px;
     padding: 10px 20px; border-radius: 50px; margin-bottom: 20px;
     display: inline-block;
-    pointer-events: none; /* Le texte ne bloque pas le clic */
+    pointer-events: none;
 }
 .rituel-content {
     font-family: var(--font-main); font-size: 1.8em;
@@ -327,7 +326,6 @@ body {
     color: var(--text-color); cursor: pointer;
     box-shadow: 0 4px 10px rgba(0,0,0,0.03); transition: all 0.2s ease;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    /* On force le bouton à être cliquable */
     pointer-events: auto !important; 
     position: relative; z-index: 10;
 }
@@ -401,7 +399,7 @@ body {
 .virus-icon { font-size: 1.2em; }
 
 /* =========================================
-   10. EFFETS SPÉCIAUX (SPLIT GAME)
+   10. EFFETS SPÉCIAUX (SPLIT GAME) & NOTE
    ========================================= */
 @keyframes shakeCard {
     0%, 100% { transform: translateX(0); }
@@ -411,4 +409,9 @@ body {
 .effect-shake {
     animation: shakeCard 0.5s ease-in-out;
     border: 3px solid #b71c1c !important; 
+}
+
+/* Animation Note */
+.note-display {
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
