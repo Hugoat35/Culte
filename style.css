@@ -415,3 +415,134 @@ body {
 .note-display {
     animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
+/* --- MODE PALMIER (Version Tactile XXL & Douce) --- */
+
+/* La scène 3D */
+.card-scene {
+    width: 280px;   /* Largeur XXL */
+    height: 400px;  /* Hauteur XXL */
+    margin: 20px auto;
+    perspective: 1000px; /* Donne la profondeur */
+}
+
+/* L'objet carte qui tourne */
+.card-object {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    cursor: pointer; /* Indique qu'on peut cliquer */
+
+    /* ÉTAT FERMÉ (Dos visible) */
+    /* Animation de repli : 0.4s (assez rapide mais fluide) */
+    transition: transform 0.4s ease-in; 
+    /* La carte est légèrement plus petite quand elle est face cachée */
+    transform: rotateY(0deg) scale(0.90); 
+}
+
+/* ÉTAT OUVERT (Face visible) */
+.card-object.flipped {
+    /* Animation d'ouverture : 0.9s avec effet élastique */
+    transition: transform 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* La carte reprend sa taille normale (effet de zoom/profondeur) */
+    transform: rotateY(180deg) scale(1);
+}
+
+/* --- LES FACES DE LA CARTE --- */
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* Cache le dos quand retourné */
+    backface-visibility: hidden;
+    border-radius: 20px; /* Coins arrondis modernes */
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2); /* Ombre portée */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    border: 1px solid #ddd;
+}
+
+/* Face Arrière (Dos Bleu) */
+.card-back {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: white;
+    font-size: 5em; /* Gros palmier au centre */
+    border: 6px solid white; /* Bordure blanche classique */
+}
+
+/* Face Avant (Chiffre + Symbole) */
+.card-front {
+    transform: rotateY(180deg); /* Elle est déjà tournée physiquement */
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    background: white;
+}
+
+/* Couleurs */
+.card-front.red { color: #e53935; }
+.card-front.black { color: #333; }
+
+/* Positionnement des chiffres dans les coins */
+.card-corner {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 2.2em; /* Indices bien lisibles */
+    line-height: 1;
+}
+
+.top-left { top: 15px; left: 15px; }
+.bottom-right { bottom: 15px; right: 15px; transform: rotate(180deg); }
+
+/* Symbole central géant */
+.card-center {
+    font-size: 8em; 
+}
+
+/* --- TEXTES & RÈGLES --- */
+
+/* Texte "Touchez la carte" */
+.instruction-text {
+    color: #888;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+/* Boîte de règle en bas */
+.rule-box {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    margin-top: 25px;
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-left: 5px solid var(--accent-color);
+    
+    /* Animation d'apparition fluide (fade in + slide up) */
+    opacity: 0; 
+    transform: translateY(10px);
+    transition: all 0.5s ease;
+}
+
+.rule-box.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.rule-box.hidden { display: none; }

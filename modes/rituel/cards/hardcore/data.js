@@ -5,4 +5,8 @@ export const data = [
     // --- AUTRES CARTES HARDCORE ---
     "{p1} tu es l'heureux propriétaire d'une pénalité ultime, prend un cul sec champion !",
     "Pour ceux qui vont en boîte après, un peu de motivation... Pénalité ultime",
+    "Le joueur avec le verre le plus rempli doit le mettre au niveau du verre le moins rempli de la table (en buvant, évidemment).",
+    "Tu es immunisé contre TOUTES les gorgées pendant 3 tours. En échange, tu dois distribuer une Pénalité Ultime au joueur de ton choix immédiatement.",
+    "Le prochain joueur qui va aux toilettes ou regarde son téléphone doit finir son verre avant de pouvoir le faire.",
+    
 ];

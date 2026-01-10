@@ -236,8 +236,7 @@ export const questions = [
     { q: "En Russie, conduire une voiture est illégal si la voiture est...", a: "Trop sale" },
     
     // --- OBJETS ---
-    { q: "À quoi servait le petit trou sur le capuchon des stylos BIC ?", a: "À éviter l'étouffement si avalé" },
     { q: "Pourquoi les claviers sont-ils en AZERTY ou QWERTY et pas par ordre alphabétique ?", a: "Pour ralentir la frappe" }, // Pour éviter que les marteaux des machines à écrire se coincent
     { q: "Quelle était la fonction première du ressort 'Slinky' (le jouet ondamania) ?", a: "Stabiliser les instruments sur les navires" },
-    { q: "À l'origine, quelle pâte à modeler célèbre était vendue comme nettoyant pour papier peint ?", a: "Le Play-Doh" }
+    { q: "À l'origine, quelle objet était vendue comme nettoyant pour papier peint ?", a: "Le Play-Doh" }
 ];

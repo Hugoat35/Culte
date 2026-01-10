@@ -99,4 +99,6 @@ export const data = [
   "Qui pourrait disparaître d'une soirée sans prévenir ?",
   "Qui pourrait sucer un pote pour 'dépanner' ?",
   "Qui pourrait pousser sur une porte qui dit 'tirer' ?",
+  "Qui est le plus susceptible de faire un blackout et de se réveiller chez un inconnu ?",
+  "Qui est le plus susceptible de faire un strip-tease sur du Disney ?",
 ]

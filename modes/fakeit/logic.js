@@ -5,6 +5,13 @@ export default class FakeItGame {
     constructor(players, container) {
         this.players = players;
         this.container = container;
+
+        // --- LE FIX EST ICI ---
+        // On force le retrait de la classe 'rituel-wrapper' (transparence) 
+        // pour retrouver le fond blanc standard.
+        this.container.className = ''; 
+        // ---------------------
+
         this.scores = {};
         players.forEach(p => this.scores[p] = 0);
 
@@ -168,7 +175,7 @@ export default class FakeItGame {
                 this.scores[guesser] += 1;
                 logs.push(`<span style="color:#2e7d32">✔ <strong>${guesser}</strong> a trouvé (+1)</span>`);
             } else {
-                // MODIFICATION ICI : +1 point pour le bluffeur au lieu de +2
+                // +1 point pour le bluffeur (comme demandé)
                 this.scores[vote.author] += 1;
                 logs.push(`<span style="color:#c62828">✖ <strong>${guesser}</strong> s'est fait avoir par <strong>${vote.author}</strong> (+1)</span>`);
             }
@@ -214,6 +221,7 @@ export default class FakeItGame {
     }
 
     showFinalScore() {
+        // Tri des scores
         const sorted = Object.entries(this.scores).sort((a,b) => b[1] - a[1]);
         const html = sorted.map(([name, score], i) => `
             <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee;">

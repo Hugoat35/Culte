@@ -4,7 +4,7 @@ export const data = [
     {
         start: "🦠 <strong>VIRUS</strong> : {p1} n'a plus le droit de répondre aux questions jusqu'à nouvel ordre. {drink} à chaque manquement.",
         end: "💉 <strong>FIN DU VIRUS</strong> : {p1} peut à nouveau parler librement.",
-        duration: [4, 8] // Durera entre 4 et 8 tours
+        duration: [6, 12] // Durera entre 4 et 8 tours
     },
     {
         start: "🦠 <strong>VIRUS</strong> : {p1} doit terminer toutes ses phrases par 'Chef'.",
@@ -19,11 +19,17 @@ export const data = [
     {
         start: "🦠 <strong>VIRUS</strong> : Tout le monde doit boire de la main gauche (ou main faible). {drink} en cas d'erreur.",
         end: "💉 <strong>FIN DU VIRUS</strong> : Vous pouvez reboire de la main droite.",
-        duration: [5, 8]
+        duration: [8, 14]
     },
     {
         start: "🦠 <strong>VIRUS</strong> : Interdit de dire le prénom de quelqu'un. On désigne du doigt !",
         end: "💉 <strong>FIN DU VIRUS</strong> : Vous pouvez utiliser les prénoms.",
         duration: [4, 7]
-    }
+    },
+    {
+        start: "🦠 <strong>VIRUS</strong> : {p1} désigne un autre joueur, pour chaque pénalité que tu prends, il la prend aussi",
+        end: "💉 <strong>FIN DU VIRUS</strong> : {p1} et son duo peuvent arrêter de partager les pénalités.",
+        duration: [8, 13]
+    },
+    
 ];

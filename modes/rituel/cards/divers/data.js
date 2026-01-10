@@ -16,6 +16,7 @@ export const data = [
     "Prennez une pénalité par allé au toilettes depuis le début de la soirée.",
     "{p1} choisis quelqu'un pour prendre {drink} avec toi.",
     "{p1} 1 pénalité par lettre dans ton prénom.",
+    "{p1} va prendre un verre d'eau, ça te fera du bien.",
    
     {
         text: "{drink} si tu as déjà pleuré à cause {opt}.",
